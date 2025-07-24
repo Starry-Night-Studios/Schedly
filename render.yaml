@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: schedly-backend
+    name: schedly
     env: python
     buildCommand: pip install -r backend/requirements.txt
     startCommand: cd backend && python app.py
@@ -21,15 +21,6 @@ services:
         fromDatabase:
           name: schedly-db
           property: connectionString
-
-  - type: static
-    name: schedly-frontend
-    staticPublishPath: ./frontend
-    buildCommand: echo "No build needed for static site"
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
 
 databases:
   - name: schedly-db

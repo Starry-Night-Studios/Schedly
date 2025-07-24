@@ -56,5 +56,11 @@ def upload():
     text, schedule = extract_text_and_schedule(image)
     return jsonify({"text": text, "schedule": schedule})
 
+@app.route('/', methods=['GET'])
+def health_check():
+    return jsonify({"status": "healthy", "message": "Schedly API is running"})
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Use PORT environment variable for Render
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)

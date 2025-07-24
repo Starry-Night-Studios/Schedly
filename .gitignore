@@ -1,3 +1,4 @@
+# Schedly - Git ignore rules
 /venv
 *.db
 __pycache__/
@@ -5,3 +6,5 @@ __pycache__/
 .env
 .env.local
 .env.production
+node_modules/
+.DS_Store

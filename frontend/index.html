@@ -2,20 +2,282 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verify Access</title>
     <link rel="stylesheet" href="style/main.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #EEE8DF 0%, #CABCB0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 20px 40px rgba(44, 54, 90, 0.1);
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid rgba(202, 188, 176, 0.2);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .icon-wrapper {
+            background: linear-gradient(135deg, #2C365A, #3d4a75);
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            box-shadow: 0 8px 24px rgba(44, 54, 90, 0.3);
+        }
+
+        .icon-wrapper::before {
+            content: "🔐";
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: #2C365A;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: #6B7280;
+            font-size: 1rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.5;
+        }
+
+        #access-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        #access-code {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            font-size: 1.1rem;
+            border: 2px solid #CABCB0;
+            border-radius: 16px;
+            background: #EEE8DF;
+            color: #2C365A;
+            transition: all 0.3s ease;
+            outline: none;
+            font-family: inherit;
+            text-align: center;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        #access-code:focus {
+            border-color: #2C365A;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(44, 54, 90, 0.1);
+            transform: translateY(-2px);
+        }
+
+        #access-code::placeholder {
+            color: #9CA3AF;
+            font-weight: 400;
+            letter-spacing: normal;
+        }
+
+        button {
+            background: linear-gradient(135deg, #2C365A 0%, #3d4a75 100%);
+            color: white;
+            border: none;
+            padding: 1.25rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(44, 54, 90, 0.4);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        #error {
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+            padding: 1rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: rgba(239, 68, 68, 0.1);
+            color: #DC2626;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            display: none;
+        }
+
+        #error.show {
+            display: block;
+            animation: fadeInShake 0.5s ease-out;
+        }
+
+        .security-note {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(202, 188, 176, 0.1);
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: #6B7280;
+            border: 1px solid rgba(202, 188, 176, 0.2);
+        }
+
+        .security-note::before {
+            content: "🛡️ ";
+            margin-right: 0.5rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInShake {
+            0% {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            25% {
+                transform: translateX(10px);
+            }
+            50% {
+                transform: translateX(-5px);
+            }
+            75% {
+                transform: translateX(5px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .icon-wrapper {
+            animation: pulse 2s infinite;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+            
+            h2 {
+                font-size: 1.75rem;
+            }
+            
+            .icon-wrapper {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .icon-wrapper::before {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h2>Enter Access Code</h2>
+    <div class="container">
+        <div class="icon-wrapper"></div>
+        <h2>Secure Access</h2>
+        <p class="subtitle">Enter your access code to continue to Schedly</p>
 
-    <form id="access-form">
-        <input type="text" id="access-code" placeholder="Enter code" required />
-        <button type="submit">Continue</button>
-    </form>
+        <form id="access-form">
+            <div class="input-group">
+                <input type="text" id="access-code" placeholder="Enter access code" required />
+            </div>
+            <button type="submit">Verify & Continue</button>
+        </form>
 
-    <p id="error" style="color: red;"></p>
+        <p id="error"></p>
+        
+        <div class="security-note">
+            Your access code ensures secure entry to the scheduling system
+        </div>
+    </div>
 
     <script src="script/config.js"></script>
     <script src="script/verify.js"></script>
+    <script>
+        // Enhanced error display
+        const originalErrorDisplay = document.getElementById('error');
+        const form = document.getElementById('access-form');
+        
+        // Override any existing error display to use our styled version
+        window.showError = function(message) {
+            originalErrorDisplay.textContent = message;
+            originalErrorDisplay.classList.add('show');
+            setTimeout(() => {
+                originalErrorDisplay.classList.remove('show');
+            }, 5000);
+        };
+        
+        // Clear error on new input
+        document.getElementById('access-code').addEventListener('input', () => {
+            originalErrorDisplay.classList.remove('show');
+        });
+    </script>
 </body>
 </html>

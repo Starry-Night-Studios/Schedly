@@ -2,18 +2,216 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register for Reminders</title>
     <link rel="stylesheet" href="style/main.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #EEE8DF 0%, #CABCB0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 20px 40px rgba(44, 54, 90, 0.1);
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid rgba(202, 188, 176, 0.2);
+        }
+
+        .icon-wrapper {
+            background: linear-gradient(135deg, #2C365A, #3d4a75);
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            box-shadow: 0 8px 24px rgba(44, 54, 90, 0.3);
+        }
+
+        .icon-wrapper::before {
+            content: "📧";
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: #2C365A;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: #6B7280;
+            font-size: 1rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.5;
+        }
+
+        #email-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        #user-email {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            font-size: 1.1rem;
+            border: 2px solid #CABCB0;
+            border-radius: 16px;
+            background: #EEE8DF;
+            color: #2C365A;
+            transition: all 0.3s ease;
+            outline: none;
+            font-family: inherit;
+        }
+
+        #user-email:focus {
+            border-color: #2C365A;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(44, 54, 90, 0.1);
+            transform: translateY(-2px);
+        }
+
+        #user-email::placeholder {
+            color: #9CA3AF;
+        }
+
+        button {
+            background: linear-gradient(135deg, #2C365A 0%, #3d4a75 100%);
+            color: white;
+            border: none;
+            padding: 1.25rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(44, 54, 90, 0.4);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        #email-status {
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+            padding: 1rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #059669;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #DC2626;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .loading {
+            background: rgba(202, 188, 176, 0.2);
+            color: #2C365A;
+            border: 1px solid rgba(202, 188, 176, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+            
+            h2 {
+                font-size: 1.75rem;
+            }
+            
+            .icon-wrapper {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .icon-wrapper::before {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h2>Register for Email Reminders</h2>
+    <div class="container">
+        <div class="icon-wrapper"></div>
+        <h2>Stay Connected</h2>
+        <p class="subtitle">Get personalized reminders 15 minutes before each class starts</p>
 
-    <form id="email-form">
-        <input type="email" id="user-email" placeholder="Enter your email" required />
-        <button type="submit">Register</button>
-    </form>
+        <form id="email-form">
+            <div class="input-group">
+                <input type="email" id="user-email" placeholder="Enter your email address" required />
+            </div>
+            <button type="submit">Register for Reminders</button>
+        </form>
 
-    <p id="email-status"></p>
+        <p id="email-status"></p>
+    </div>
 
     <script src="script/config.js"></script>
     <script src="script/register.js"></script>

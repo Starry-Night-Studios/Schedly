@@ -1,0 +1,9 @@
+Flask
+pytesseract
+APScheduler
+Flask-Mail
+Werkzeug
+Pillow
+Flask-SQLAlchemy
+python-dotenv
+Flask-CORS

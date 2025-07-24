@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Upload Schedule</title>
+    <link rel="stylesheet" href="style/main.css" />
+</head>
+<body>
+    <h2>Upload Your Timetable</h2>
+
+    <form id="upload-form">
+        <input type="file" id="image-file" accept="image/*" required />
+        <button type="submit">Process Image</button>
+    </form>
+
+    <p id="upload-status"></p>
+    
+    <div id="ocr-result" style="display: none;"></div>
+    
+    <button id="continue-btn" style="display: none;">Continue to Registration</button>
+
+    <script src="script/config.js"></script>
+    <script src="script/upload.js"></script>
+</body>
+</html>

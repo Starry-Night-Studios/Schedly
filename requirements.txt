@@ -1,6 +1,0 @@
-Flask
-pytesseract
-APScheduler
-Flask-Mail
-Werkzeug
-Pillow

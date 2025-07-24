@@ -120,6 +120,12 @@
             transform: translateY(-1px);
         }
 
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         button::before {
             content: '';
             position: absolute;
@@ -131,7 +137,7 @@
             transition: left 0.5s;
         }
 
-        button:hover::before {
+        button:hover:not(:disabled)::before {
             left: 100%;
         }
 
@@ -141,6 +147,12 @@
             padding: 1rem;
             border-radius: 12px;
             transition: all 0.3s ease;
+            display: none;
+        }
+
+        #email-status.show {
+            display: block;
+            animation: fadeInUp 0.3s ease-out;
         }
 
         .success {
@@ -161,6 +173,18 @@
             border: 1px solid rgba(202, 188, 176, 0.3);
         }
 
+        .loading::before {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #CABCB0;
+            border-radius: 50%;
+            border-top-color: #2C365A;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -169,6 +193,12 @@
             to {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
             }
         }
 
@@ -210,10 +240,99 @@
             <button type="submit">Register for Reminders</button>
         </form>
 
-        <p id="email-status"></p>
+        <div id="email-status"></div>
     </div>
 
     <script src="script/config.js"></script>
     <script src="script/register.js"></script>
+    <script>
+        // Simple status message handling
+        function showMessage(text, isError = false) {
+            const statusEl = document.getElementById('email-status');
+            const submitBtn = document.querySelector('button[type="submit"]');
+            
+            // Clear existing classes
+            statusEl.className = '';
+            
+            // Set message and appropriate class
+            statusEl.textContent = text;
+            statusEl.classList.add('show');
+            
+            if (isError) {
+                statusEl.classList.add('error');
+                submitBtn.disabled = false;
+            } else {
+                statusEl.classList.add('success');
+                submitBtn.disabled = false;
+            }
+        }
+
+        function showLoading() {
+            const statusEl = document.getElementById('email-status');
+            const submitBtn = document.querySelector('button[type="submit"]');
+            
+            statusEl.className = '';
+            statusEl.textContent = 'Registering...';
+            statusEl.classList.add('show', 'loading');
+            submitBtn.disabled = true;
+        }
+
+        function hideMessage() {
+            const statusEl = document.getElementById('email-status');
+            statusEl.classList.remove('show');
+        }
+
+        // Form submission handler
+        document.getElementById('email-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('user-email').value;
+            
+            if (!email) {
+                showMessage('Error', true);
+                return;
+            }
+
+            showLoading();
+
+            // Get schedule from localStorage or sessionStorage
+            const schedule = localStorage.getItem('extractedSchedule') || sessionStorage.getItem('extractedSchedule');
+            
+            if (!schedule) {
+                showMessage('Error', true);
+                return;
+            }
+
+            // Make API call
+            fetch(`${window.API_BASE_URL}/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    schedule: JSON.parse(schedule)
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'registered') {
+                    showMessage('Successfully registered for reminders!', false);
+                    document.getElementById('user-email').value = '';
+                } else {
+                    showMessage('Error', true);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('Error', true);
+            });
+        });
+
+        // Clear message when user starts typing
+        document.getElementById('user-email').addEventListener('input', function() {
+            hideMessage();
+        });
+    </script>
 </body>
 </html>

@@ -14,8 +14,8 @@ app = Flask(__name__)
 
 # Configure CORS for your frontend domain
 CORS(app, origins=[
-    "http://localhost:3000",  # Local development
-    "https://your-frontend-domain.vercel.app",   # Or Vercel URL
+    "http://localhost:3000",
+    "https://schedly-lemon.vercel.app/",
 ])
 
 # Database configuration

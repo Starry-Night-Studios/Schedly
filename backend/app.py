@@ -11,7 +11,12 @@ from scheduler import schedule_emails
 from config import VALID_ACCESS_CODE, SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS
 
 app = Flask(__name__)
-CORS(app)
+
+# Configure CORS for your frontend domain
+CORS(app, origins=[
+    "http://localhost:3000",  # Local development
+    "https://your-frontend-domain.vercel.app",   # Or Vercel URL
+])
 
 # Database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
@@ -61,6 +66,5 @@ def health_check():
     return jsonify({"status": "healthy", "message": "Schedly API is running"})
 
 if __name__ == '__main__':
-    # Use PORT environment variable for Render
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)

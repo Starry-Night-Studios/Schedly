@@ -21,12 +21,19 @@ except ImportError as e:
 
 app = Flask(__name__)
 
-# Configure CORS
-CORS(app, origins=[
-    "http://localhost:3000",
-    "http://127.0.0.1:5500",
-    "https://schedly-lemon.vercel.app",  # Update with your actual Vercel URL
-])
+# Configure CORS - Allow all origins for testing, restrict in production
+CORS(app, 
+     resources={r"/*": {
+         "origins": [
+             "http://localhost:3000",
+             "http://127.0.0.1:5500",
+             "http://localhost:5500",
+             "https://schedly-lemon.vercel.app"
+         ],
+         "methods": ["GET", "POST", "OPTIONS"],
+         "allow_headers": ["Content-Type"],
+         "supports_credentials": True
+     }})
 
 # Database configuration
 if 'SQLALCHEMY_DATABASE_URI' in globals():
@@ -45,16 +52,25 @@ if 'SQLALCHEMY_DATABASE_URI' in globals():
 def health_check():
     return jsonify({"status": "healthy", "message": "Schedly API is running"})
 
-@app.route('/verify', methods=['POST'])
+@app.route('/verify', methods=['POST', 'OPTIONS'])
 def verify():
+    # Handle preflight request
+    if request.method == 'OPTIONS':
+        return '', 204
+    
     data = request.get_json()
     code = data.get('code')
+    
     if 'VALID_ACCESS_CODE' in globals() and code == VALID_ACCESS_CODE:
         return jsonify({"valid": True})
     return jsonify({"valid": False}), 401
 
-@app.route('/register', methods=['POST'])
+@app.route('/register', methods=['POST', 'OPTIONS'])
 def register():
+    # Handle preflight request
+    if request.method == 'OPTIONS':
+        return '', 204
+    
     try:
         data = request.get_json()
         email = data.get('email')
@@ -72,8 +88,12 @@ def register():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/upload', methods=['POST'])
+@app.route('/upload', methods=['POST', 'OPTIONS'])
 def upload():
+    # Handle preflight request
+    if request.method == 'OPTIONS':
+        return '', 204
+    
     try:
         image = request.files.get('image')
         if not image:

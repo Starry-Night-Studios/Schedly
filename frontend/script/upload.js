@@ -12,7 +12,7 @@ async function uploadImage(imageFile) {
         statusText.textContent = 'Processing image...';
         
         const formData = new FormData();
-        formData.append('image', imageFile);
+        formData.append('image', imageFile);  // Changed from 'image-file' to 'image' to match backend
 
         const response = await fetch(window.API_CONFIG.ENDPOINTS.UPLOAD, {
             method: 'POST',

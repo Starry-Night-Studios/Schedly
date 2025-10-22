@@ -40,12 +40,20 @@ async function verifyAccessCode(code) {
             window.location.href = 'upload.html';
             return true;
         } else {
-            document.getElementById('error').textContent = 'Invalid code. Try again.';
+            const errorEl = document.getElementById('error');
+            if (errorEl) {
+                errorEl.textContent = 'Invalid code. Try again.';
+                errorEl.classList.add('show');
+            }
             return false;
         }
     } catch (error) {
         console.error('Error verifying access code:', error);
-        document.getElementById('error').textContent = 'Server error. Try again later.';
+        const errorEl = document.getElementById('error');
+        if (errorEl) {
+            errorEl.textContent = 'Server error. Try again later.';
+            errorEl.classList.add('show');
+        }
         return false;
     }
 }
